@@ -1,24 +1,42 @@
 var Cipher = function(key_value){
+  this.MIN_CHAR_VAL = 'a'.charCodeAt(0);
+  this.MAX_CHAR_VAL = 'z'.charCodeAt(0);
+  this.WRAP = this.MAX_CHAR_VAL - this.MIN_CHAR_VAL + 1;
+
   if(key_value !== undefined){
     if(key_value.length === 0 || !key_value.match(/[a-z]+/)) {
       throw new Error('Bad key');
     }
     this.key = key_value;
   } else {
-     this.key = 'aaaaaaaaaaaaaaaaaa';
+    this.key = this.randomKey();
   }
+}
 
-  this.MAX_CHAR_VAL = 'z'.charCodeAt(0);
-  this.WRAP = 'z'.charCodeAt(0) - 'a'.charCodeAt(0) + 1;
+Cipher.prototype.randomInt = function () {
+  var min = Math.ceil(this.MIN_CHAR_VAL);
+  var max = Math.floor(this.MAX_CHAR_VAL);
+  //The maximum is exclusive and the minimum is inclusive
+  return Math.floor(Math.random() * (max - min)) + min;
+}
+
+Cipher.prototype.randomKey = function() {
+  var newKey = [];
+  for(var i=0;i<100;i++){
+    newKey.push(this.randomInt());
+  }
+  return String.fromCharCode(...newKey);
 }
 
 Cipher.prototype.keyShiftAt = function(index){
-  return this.key.charCodeAt(index) - 'a'.charCodeAt(0);
+  return this.key.charCodeAt(index) - this.MIN_CHAR_VAL;
 }
 
 Cipher.prototype.wrap = function(char){
   if(char > this.MAX_CHAR_VAL){
     return char - this.WRAP;
+  }else if(char < this.MIN_CHAR_VAL) {
+    return char + this.WRAP
   }
   return char;
 }
