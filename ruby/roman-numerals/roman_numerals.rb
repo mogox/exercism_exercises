@@ -1,102 +1,88 @@
+require 'byebug'
+
 class BookKeeping
   VERSION = 2
 end
 
 class Integer
   def to_roman
-    roman = ""
-    roman << hundreds(self % 100 - (self%10)) if self > 10
-    roman << tens(self%10)
-    roman
-  end
-
-  def five(number)
-    case(number)
-      when 1
-        return "I"
-      when 2
-        return "II"
-      when 3
-        return "III"
-      when 4
-        return "IV"
-      when 5
-        return "V"
-    end
-    return ""
-  end
-
-  def tens(number)
-    p "T: #{number}"
-    return "IX" if number == 9
-    if number > 5
-      return "V" + five(number-5)
-    else
-      return five(number)
-    end
-  end
-
-
-  def five_tens(number)
-    case(number)
-      when 10
-        return "X"
-      when 20
-        return "XX"
-      when 30
-        return "XXX"
-      when 40
-        return "XL"
-      when 50
-        return "L"
-    end
-  end
-
-  def hundreds(number)
-   p "H: #{number}"
-   return "XC" if number == 90
-   if number > 50
-     return "L" + five_tens(number - 50)
-   else
-    return five_tens(number)
-   end
-   return ""
+    translator = RomanConverter.new
+    translator.convert(self)
   end
 end
 
-
 class RomanConverter
-  ROMAN_LETTERS = [ "I", "V", "X", "L", "C", "D", "M"]
-
-  ROMAN_RAW = {
-     1: "I",
-     5: "V",
-     10: "X",
-     50: "L",
-     100: "C",
-     500: "D",
-     1000: "M"
+  ROMAN_NUMERALS = {
+     1      => "I",
+     4      => "IV",
+     5      => "V",
+     9      => "IX",
+     10     => "X",
+     40     => "XL",
+     50     => "L",
+     90     => "XC",
+     100    => "C",
+     400    => "CD",
+     500    => "D",
+     900    => "CM",
+     1000   => "M"
   }
 
-
-  def translate(digit)
-    base_letter = get_letter(digit)
-  end
-
-  def get_letter(digit)
-  end
+  FIVE_ROMAN = {
+    1 => "I",
+    2 => "II",
+    3 => "III",
+    4 => "IV",
+    5 => "V"
+  }
 
   def convert(number)
-    keys = ROMAN_RAW.keys.reverse
-    abc = ""
-    num = number
-    keys.each do |numeral|
-      div = num/numeral
-      if div > 0
-        abc << translate(div) if div > 0
-        num = div
+    result = ''
+    next_number = number
+    current_number = number
+    while current_number > 0 do
+      if current_number >= 1000
+        result = ROMAN_NUMERALS[1000] + result
+        next_number = current_number - 1000
+      elsif current_number >= 900 && current_number < 1000
+        result = ROMAN_NUMERALS[900] + result
+        next_number = current_number - 900
+      elsif current_number > 500
+        result = ROMAN_NUMERALS[500] + result
+        next_number = current_number - 500
+      elsif current_number >= 400 && current_number < 500
+        result = ROMAN_NUMERALS[400] + result
+        next_number = current_number - 400
+      elsif current_number >= 100
+        result = ROMAN_NUMERALS[100] + result
+        next_number = current_number - 100
+      elsif current_number >= 90 && current_number < 100
+        result = result + ROMAN_NUMERALS[90]
+        next_number = current_number - 90
+      elsif current_number >= 50
+        result = result + ROMAN_NUMERALS[50]
+        next_number = current_number - 50
+      elsif current_number >= 40  && current_number < 50
+        result = result + ROMAN_NUMERALS[40]
+        next_number = current_number - 40
+      elsif current_number >= 10
+        result = result + ROMAN_NUMERALS[10]
+        next_number = current_number - 10
+      elsif current_number == 9
+        result = result + ROMAN_NUMERALS[9]
+        next_number = current_number - 9
+      elsif current_number < 9 && current_number > 5
+        result << ROMAN_NUMERALS[5]
+        next_number = current_number - 5
+      elsif current_number == 4
+        result << ROMAN_NUMERALS[4]
+        next_number = current_number - 4
+      elsif current_number <= 5
+        result << FIVE_ROMAN[current_number]
+        next_number = current_number - current_number
       end
+      current_number = next_number
     end
+    result
   end
-
 end
