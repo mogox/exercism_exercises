@@ -28,14 +28,6 @@ class RomanConverter
      1000   => "M"
   }
 
-  FIVE_ROMAN = {
-    1 => "I",
-    2 => "II",
-    3 => "III",
-    4 => "IV",
-    5 => "V"
-  }
-
   def convert(number)
     ROMAN_NUMERALS.keys.reverse.inject('') { |roman, decimal|
       times = number / decimal
