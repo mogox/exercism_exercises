@@ -10,11 +10,9 @@ class Prime
     nth_prime = 2
     counter = nth_prime
     prime_index = 1
-    primes = []
     while(prime_index < number) do
       counter += 1
       if is_prime? counter
-        primes << counter
         prime_index += 1
         nth_prime = counter
       end
