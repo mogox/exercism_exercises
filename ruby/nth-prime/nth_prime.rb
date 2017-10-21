@@ -16,7 +16,6 @@ class Prime
         prime_index += 1
         nth_prime = counter
       end
-      counter += 1
     end
     nth_prime
   end
