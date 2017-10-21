@@ -7,15 +7,16 @@ end
 class Prime
   def self.nth(number)
     raise ArgumentError if number <= 0
-    nth_prime = 2
+    return 2 if number == 1
+    nth_prime = 3
     counter = nth_prime
     prime_index = 1
     while(prime_index < number) do
-      counter += 1
       if is_prime? counter
         prime_index += 1
         nth_prime = counter
       end
+      counter += 2
     end
     nth_prime
   end
