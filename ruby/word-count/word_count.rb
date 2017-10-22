@@ -1,13 +1,10 @@
 class Phrase
-
   def initialize(phrase)
     @phrase = cleanup(phrase)
   end
 
   def word_count
-    phrase.split(/\s/).inject({}) do |memo, word|
-      token = word.count("'") == 2 ? word.gsub(/'/i, '') : word
-      token = token.downcase
+    phrase.each_with_object({}) do |token, memo|
       memo[token] = memo.fetch(token, 0) + 1
       memo
     end
@@ -20,7 +17,7 @@ class Phrase
   end
 
   def cleanup(phrase)
-    phrase.gsub(/[\.,]/, ' ').gsub('  ', ' ').gsub(/[^0-9a-z' ]/i, '')
+    phrase.downcase.scan(/\b[a-z0-9']+\b/)
   end
 end
 
