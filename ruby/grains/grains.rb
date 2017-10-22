@@ -8,7 +8,7 @@ class ChessBoard
   end
 
   def square(number)
-    raise ArgumentError if number <= 0 || number > 64
+    raise ArgumentError unless number.between?(1, 64)
     board.fetch(number) { |num| board[num] = calculate_square(num) }
   end
 
