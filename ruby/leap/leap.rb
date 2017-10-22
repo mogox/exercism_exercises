@@ -12,20 +12,21 @@ class LeapYear
   end
 
   private
+
   def year
     @year
   end
 
   def divisible_by_4?
-    year % 4 == 0
+    (year % 4).zero?
   end
 
   def divisible_by_100?
-    year % 100 == 0
+    (year % 100).zero?
   end
 
   def divisible_by_400?
-    year % 400 == 0
+    (year % 400).zero?
   end
 end
 
